@@ -1,4 +1,4 @@
-# MURA Bone X-Ray Classification Using Deep Learning
+# Bone X-Ray Classification Using Deep Learning
 
 This project focuses on binary image classification for musculoskeletal X-ray images using deep learning. The goal is to classify each X-ray image as either **positive** or **negative**, where positive cases indicate the presence of an abnormality and negative cases indicate normal studies.
 
