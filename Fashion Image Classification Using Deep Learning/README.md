@@ -1,12 +1,20 @@
 # Fashion Image Classification Using Deep Learning
 
-This folder contains a deep learning project for image classification using the **Fashion MNIST** dataset. The goal is to classify grayscale fashion product images into different categories using neural network models.
+This folder contains a deep learning project for image classification using the **Fashion MNIST** dataset, available on Kaggle:
 
-The project is implemented in a Jupyter/Google Colab notebook using **TensorFlow** and **Keras**. It explores and compares different deep learning approaches, including Multi-Layer Perceptron models and Convolutional Neural Networks.
+https://www.kaggle.com/datasets/zalando-research/fashionmnist
+
+The goal of the project is to classify grayscale fashion product images into different categories using deep learning models.
+
+The project is implemented in a Jupyter/Google Colab notebook using **TensorFlow** and **Keras**. It explores and compares different neural network approaches, including Multi-Layer Perceptron models and Convolutional Neural Networks.
 
 ## Dataset
 
-The project uses the **Fashion MNIST** dataset, which contains 28x28 grayscale images of fashion items.
+The project uses the **Fashion MNIST** dataset, which contains 28x28 grayscale images of fashion products. It is designed as a more challenging alternative to the classic MNIST digit dataset and is commonly used for benchmarking image classification models.
+
+The dataset can be found on Kaggle:
+
+https://www.kaggle.com/datasets/zalando-research/fashionmnist
 
 The dataset includes 10 classes:
 
@@ -21,7 +29,7 @@ The dataset includes 10 classes:
 - Bag
 - Ankle boot
 
-Each image belongs to one of these categories, and the task is to train models that can correctly identify the class of each fashion item.
+Each image belongs to one of these categories, and the task is to train deep learning models that can correctly classify each fashion item.
 
 ## Project Overview
 
@@ -39,7 +47,7 @@ The notebook performs the following steps:
 - Builds and trains Convolutional Neural Network models.
 - Compares different optimizers, including Adam and SGD.
 - Applies regularization techniques such as dropout.
-- Uses callbacks such as early stopping and learning rate reduction.
+- Uses callbacks such as Early Stopping and ReduceLROnPlateau.
 - Uses hyperparameter tuning to search for better model configurations.
 - Evaluates model performance using classification metrics.
 - Visualizes training curves and confusion matrices.
@@ -57,9 +65,11 @@ Different configurations are tested, including:
 - Activation functions
 - Dropout rate
 - Learning rate
+- Batch size
 - Optimizer type
+- Kernel initializer
 
-The MLP models provide a useful baseline for the classification task.
+The MLP models provide a useful baseline for the classification task. They help show how a fully connected neural network performs when the spatial structure of the image is not directly preserved.
 
 ### Convolutional Neural Network
 
@@ -73,7 +83,7 @@ The CNN models include:
 - Dense layers
 - Softmax output layer for multi-class classification
 
-The CNN models generally perform better because they can learn local visual patterns such as edges, shapes, and textures.
+CNN models are able to learn local visual patterns such as edges, shapes, textures, and object-like structures. For this reason, they generally perform better than simple dense models on image classification tasks.
 
 ## Hyperparameter Tuning
 
@@ -109,13 +119,15 @@ The evaluation includes:
 - Confusion matrix
 - Accuracy and loss curves
 
-The results help identify which model performs better and which classes are more difficult to classify.
+The results help identify which model performs better and which fashion categories are more difficult to classify.
 
 ## Results And Observations
 
 The project shows that Convolutional Neural Networks are more effective than simple dense models for this image classification task. CNNs are better able to capture visual patterns from the fashion images, while MLP models lose spatial information after flattening the input images.
 
-Some fashion categories are easier to classify, such as bags, trousers, sandals, sneakers, and ankle boots. Other categories, such as shirts, T-shirts, pullovers, and coats, can be more challenging because they have similar visual features.
+Some fashion categories are easier to classify, such as bags, trousers, sandals, sneakers, and ankle boots. Other categories, such as shirts, T-shirts, pullovers, and coats, can be more challenging because they share similar shapes and visual features.
+
+The comparison between optimizers also shows how training strategy affects model performance. Adaptive optimizers such as Adam usually converge faster and more smoothly than basic SGD in this type of experiment.
 
 ## Technologies Used
 
