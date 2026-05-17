@@ -4,8 +4,6 @@ This repository is my personal space for organizing and sharing projects related
 
 It serves as a central place where I collect my work, experiments, notebooks, and project implementations. Each folder represents a separate project and is documented individually when needed.
 
-The goal of this repository is to keep my work clean, accessible, and easy to explore.
-
 ## Contributions
 
 I am open to suggestions, improvements, and contributions.  
