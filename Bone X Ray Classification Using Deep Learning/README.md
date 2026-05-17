@@ -1,4 +1,4 @@
-# MURA Bone X-Ray Classification Using Deep Learning
+# Bone X-Ray Classification Using Deep Learning
 
 This folder contains a deep learning project for binary abnormality classification on musculoskeletal X-ray images using the **MURA v1.1 dataset**. The goal of the project is to classify X-ray images as either **positive** or **negative**, where positive cases indicate the presence of an abnormality and negative cases indicate normal studies.
 
