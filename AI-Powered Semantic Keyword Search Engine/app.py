@@ -17,6 +17,7 @@ pip install faiss-cpu numpy pandas python-dotenv openai>=1.0.0 rapidfuzz
 
 import os, re, uuid, getpass
 from pathlib import Path
+from typing import Optional
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
@@ -93,7 +94,7 @@ def embed_one(client, text: str) -> np.ndarray:
     v = np.array([resp.data[0].embedding], dtype="float32")
     return normalize_rows(v) if NORMALIZE else v
 
-def read_keywords_csv(path: Path, column: str | None = None, columns: str | None = None) -> list[str]:
+def read_keywords_csv(path: Path, column: Optional[str] = None, columns: Optional[str] = None) -> list[str]:
     """
     Υποστηρίζει:
     - 1 στήλη: --column <name> (ή αν λείπει, παίρνει 'keyword' ή την 1η στήλη)
