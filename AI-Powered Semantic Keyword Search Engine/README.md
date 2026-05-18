@@ -208,50 +208,6 @@ pip install -r requirements.txt
 
 ---
 
-## `experimentation.ipynb`
-
-Notebook used for experimentation, testing, and retrieval evaluation during development.
-
----
-
-# 🧩 Core Technologies
-
-## OpenAI Embeddings
-
-Used to convert text and keywords into semantic vectors.
-
----
-
-## FAISS
-
-FAISS is a high-performance vector similarity search library developed by Meta.
-
-It enables extremely fast nearest-neighbor retrieval.
-
----
-
-## HNSW
-
-HNSW (Hierarchical Navigable Small World) is a graph-based nearest-neighbor algorithm optimized for scalable vector search.
-
----
-
-## Semantic Search
-
-Traditional search:
-
-```text
-matches words
-```
-
-Semantic search:
-
-```text
-matches meaning
-```
-
----
-
 # 🚀 Setup
 
 Install dependencies:
