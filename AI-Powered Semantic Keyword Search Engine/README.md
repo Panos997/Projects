@@ -1,4 +1,4 @@
-# 🧠 Overview
+# Overview
 
 **AI Semantic Keyword Retrieval System** is an experimental semantic search project developed during my work at **Kathimerini**.
 
@@ -19,7 +19,7 @@ Although the system started as a mini prototype, its architecture was designed w
 
 ---
 
-# 🎯 Project Goal
+# Project Goal
 
 The main objective of the project was to test whether semantic search could retrieve relevant keywords from articles, phrases, or documents using semantic similarity instead of traditional text matching.
 
@@ -58,7 +58,7 @@ Top Semantic Keyword Matches
 
 ---
 
-# 🔍 How It Works Step-by-Step
+# How It Works Step-by-Step
 
 ### 1. User Input
 
@@ -167,7 +167,7 @@ These keywords form the semantic retrieval space of the system.
 
 ---
 
-# 📁 Project Structure
+# Project Structure
 
 ```text
 AI Semantic Keyword Retrieval System/
@@ -180,7 +180,7 @@ AI Semantic Keyword Retrieval System/
 
 ---
 
-# 📄 File Explanation
+# File Explanation
 
 ## `app.py`
 
@@ -208,7 +208,7 @@ pip install -r requirements.txt
 
 ---
 
-# 🚀 Setup
+# Setup
 
 Install dependencies:
 
@@ -224,7 +224,7 @@ python app.py
 
 ---
 
-# ▶️ Startup Flow
+# Startup Flow
 
 When the application starts, it asks for:
 
@@ -241,7 +241,7 @@ The system then:
 
 ---
 
-# 🏗️ What This Project Demonstrates
+# What This Project Demonstrates
 
 This project demonstrates:
 
@@ -263,7 +263,7 @@ The architecture is conceptually similar to systems used in:
 
 ---
 
-# ✅ Conclusion
+# Conclusion
 
 This project demonstrates how modern AI retrieval systems can move beyond traditional keyword matching and perform semantic understanding through embeddings and vector search.
 
