@@ -1,6 +1,0 @@
-faiss-cpu
-numpy
-pandas
-python-dotenv
-openai>=1.0.0
-rapidfuzz
