@@ -40,7 +40,7 @@ In summary:
 
 ---
 
-# ⚙️ How the System Works
+# How the System Works
 
 The application performs semantic keyword retrieval through the following pipeline:
 
