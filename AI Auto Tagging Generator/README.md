@@ -138,16 +138,6 @@ pip install -r requirements.txt
 
 ---
 
-# Technologies Used
-
-- Python
-- Google Gemini API
-- GenAI SDK
-- IPyWidgets
-- Jupyter Notebook
-
----
-
 # Requirements
 
 Before running the project, the following are required:
