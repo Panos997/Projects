@@ -120,10 +120,9 @@ Contains the CSS styling used for the interface design.
 
 ---
 
-## `Code.ipynb`
+## `Code.py`
 
-Notebook version used for testing and experimentation inside Google Colab or Jupyter environments.
-
+The code needed for running
 ---
 
 ## `requirements.txt`
