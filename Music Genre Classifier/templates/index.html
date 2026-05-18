@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Music Genre Predictor | Smart Scan</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 40px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
+            min-height: 100vh;
+            margin: 0;
+            color: #2d3436; 
+        }
+
+        .container { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 30px; 
+            display: inline-block; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 550px; 
+        }
+
+        .file-label {
+            display: block;
+            background: #f1f2f6;
+            border: 2px dashed #b2bec3;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #636e72;
+            font-weight: 500;
+        }
+        .file-label:hover { background: #dfe6e9; border-color: #1db954; }
+        .file-label.selected { border-color: #1db954; background: #e8f5e9; color: #1db954; }
+
+        #progressContainer { 
+            width: 100%; 
+            background: #dfe6e9; 
+            border-radius: 50px; 
+            margin: 25px 0; 
+            display: none; 
+            height: 28px;
+            overflow: hidden;
+        }
+
+        #progressBar { 
+            width: 0%; 
+            height: 100%; 
+            background: linear-gradient(90deg, #1db954, #1ed760); 
+            color: white; 
+            line-height: 28px; 
+            font-weight: 600; 
+            font-size: 13px;
+            transition: all 0.4s ease; 
+        }
+
+        button { 
+            background: linear-gradient(to right, #1db954, #191414); 
+            color: white; 
+            border: none; 
+            padding: 15px 40px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: bold; 
+            box-shadow: 0 10px 20px rgba(29, 185, 84, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .result-item { 
+            background: #f1f2f6; 
+            margin: 8px 0; 
+            padding: 12px; 
+            border-radius: 12px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        canvas { margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🎵 Music Genre AI</h1>
+        <p>Έξυπνη ανάλυση 3 σημείων (Deep Scan)</p>
+        
+        <input type="file" id="audioFile" accept="audio/*" style="display: none;" onchange="updateFileName()">
+        <label for="audioFile" id="fileLabel" class="file-label">
+            📁 Κάντε κλικ για να επιλέξετε αρχείο
+        </label>
+        
+        <button onclick="processAndUpload()">Έναρξη Πρόβλεψης</button>
+
+        <div id="progressContainer">
+            <div id="progressBar">Προετοιμασία...</div>
+        </div>
+
+        <div id="results" class="result-text"></div>
+        <canvas id="genreChart"></canvas>
+    </div>
+
+    <script>
+        // Καταχώρηση του plugin για μόνιμα labels
+        Chart.register(ChartDataLabels);
+
+        let myChart = null;
+        const chartColors = [
+            { start: '#1db954', end: '#1ed760' }, 
+            { start: '#00b894', end: '#55efc4' }, 
+            { start: '#2d3436', end: '#636e72' }
+        ];
+
+        function updateFileName() {
+            const input = document.getElementById('audioFile');
+            const label = document.getElementById('fileLabel');
+            if (input.files.length > 0) {
+                label.innerHTML = `✅ Επιλέχθηκε: ${input.files[0].name}`;
+                label.classList.add('selected');
+            }
+        }
+
+        async function processAndUpload() {
+            const fileInput = document.getElementById('audioFile');
+            const progBar = document.getElementById('progressBar');
+            const progContainer = document.getElementById('progressContainer');
+            
+            if (!fileInput.files[0]) return alert("Παρακαλώ επιλέξτε πρώτα ένα αρχείο!");
+
+            progContainer.style.display = "block";
+            progBar.style.width = "100%";
+            progBar.innerHTML = "Επεξεργασία δείγματος...";
+
+            try {
+                const trimmedBlob = await createSmartSample(fileInput.files[0]);
+                const formData = new FormData();
+                formData.append('file', trimmedBlob, "sample.wav");
+
+                const xhr = new XMLHttpRequest();
+                
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        progBar.style.width = percent + "%";
+                        progBar.innerHTML = "Uploading: " + percent + "%";
+                    }
+                };
+
+                xhr.upload.onload = () => {
+                    progBar.style.background = "linear-gradient(90deg, #f39c12, #f1c40f)";
+                    progBar.innerHTML = "AI: Ερμηνεία τραγουδιού...";
+                };
+
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        renderChart(data);
+                        showResults(data);
+                        progBar.style.background = "linear-gradient(90deg, #00b894, #55efc4)";
+                        progBar.innerHTML = "Ολοκληρώθηκε!";
+                    }
+                };
+
+                xhr.open("POST", "/predict");
+                xhr.send(formData);
+            } catch (err) { alert("Σφάλμα επεξεργασίας."); }
+        }
+
+        async function createSmartSample(file) {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const arrayBuffer = await file.arrayBuffer();
+            const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+            
+            // Παίρνουμε 10 δευτερόλεπτα από 3 σημεία (Αρχή, Μέση, Τέλος)
+            const sampleSecs = 10;
+            const rate = audioBuffer.sampleRate;
+            const chunkLen = sampleSecs * rate;
+            const totalLen = audioBuffer.length;
+
+            const startPos = 0;
+            const midPos = Math.max(0, Math.floor(totalLen / 2) - Math.floor(chunkLen / 2));
+            const endPos = Math.max(0, totalLen - chunkLen);
+
+            const newBuffer = audioCtx.createBuffer(audioBuffer.numberOfChannels, chunkLen * 3, rate);
+            
+            for (let ch = 0; ch < audioBuffer.numberOfChannels; ch++) {
+                const old = audioBuffer.getChannelData(ch);
+                const n = newBuffer.getChannelData(ch);
+                n.set(old.slice(startPos, startPos + chunkLen), 0);
+                n.set(old.slice(midPos, midPos + chunkLen), chunkLen);
+                n.set(old.slice(endPos, endPos + chunkLen), chunkLen * 2);
+            }
+            return bufferToWav(newBuffer);
+        }
+
+        function bufferToWav(abuffer) {
+            let n = abuffer.numberOfChannels, len = abuffer.length * n * 2 + 44, buffer = new ArrayBuffer(len), view = new DataView(buffer), pos = 0;
+            const set16 = (d) => { view.setUint16(pos, d, true); pos += 2; }, set32 = (d) => { view.setUint32(pos, d, true); pos += 4; };
+            set32(0x46464952); set32(len - 8); set32(0x45564157); set32(0x20746d66); set32(16); set16(1); set16(n);
+            set32(abuffer.sampleRate); set32(abuffer.sampleRate * 2 * n); set16(n * 2); set16(16); set32(0x61746164); set32(len - pos - 4);
+            for(let i=0; i<abuffer.length; i++) { for(let ch=0; ch<n; ch++) {
+                let s = Math.max(-1, Math.min(1, abuffer.getChannelData(ch)[i]));
+                view.setInt16(pos, s < 0 ? s * 0x8000 : s * 0x7FFF, true); pos += 2;
+            }}
+            return new Blob([buffer], {type: "audio/wav"});
+        }
+
+        function showResults(data) {
+            const div = document.getElementById('results');
+            div.innerHTML = `<h3 style="margin:20px 0 10px 0;">📊 Ανάλυση</h3>` + 
+                data.map((item) => `<div class="result-item"><span>${item.genre}</span><span>${item.probability}%</span></div>`).join('');
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('genreChart').getContext('2d');
+            const gradients = data.map((_, i) => {
+                const g = ctx.createLinearGradient(0, 0, 0, 400);
+                g.addColorStop(0, chartColors[i % 3].start);
+                g.addColorStop(1, chartColors[i % 3].end);
+                return g;
+            });
+
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(i => i.genre),
+                    datasets: [{
+                        data: data.map(i => i.probability),
+                        backgroundColor: gradients,
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    cutout: '65%',
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#ffffff',
+                            font: { weight: 'bold', size: 14 },
+                            formatter: (value) => value + '%',
+                            anchor: 'center',
+                            align: 'center',
+                            textShadowBlur: 4,
+                            textShadowColor: 'rgba(0,0,0,0.5)'
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: '#2d3436',
+                            callbacks: {
+                                label: (context) => ` ${context.label}: ${context.raw}%`
+                            }
+                        }
+                    } 
+                }
+            });
+        }
+    </script>
+</body>
+</html>
