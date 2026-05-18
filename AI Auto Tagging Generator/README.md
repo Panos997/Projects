@@ -85,58 +85,6 @@ AI Auto Tagging Generator/
 
 ---
 
-# File Explanation
-
-## `ui.py`
-
-Main user interface logic.
-
-Responsible for:
-
-- rendering the interface
-- receiving user input
-- displaying generated tags
-- handling interaction flow
-
----
-
-## `genai_client.py`
-
-Core AI logic.
-
-Responsible for:
-
-- Gemini API connection
-- API key validation
-- prompt generation
-- semantic tag generation
-- result cleaning and deduplication
-
----
-
-## `styles.py`
-
-Contains the CSS styling used for the interface design.
-
----
-
-## `Code.py`
-
-The code needed for running
----
-
-## `requirements.txt`
-
-Contains all required dependencies for the project.
-
-Install them using:
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
 # Requirements
 
 Before running the project, the following are required:
