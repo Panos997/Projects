@@ -106,6 +106,9 @@ The notebook also examines how the model performs across the different anatomica
 
 The project shows how a CNN can be trained to detect abnormalities in medical X-ray images. The per-body-part evaluation is especially useful because performance may vary depending on the anatomical region and the visual complexity of the X-ray images.
 
+<img width="707" height="728" alt="image" src="https://github.com/user-attachments/assets/9efe36d0-cfd1-4322-9c4a-62c6e8f68c94" />
+
+
 Some body parts may be easier to classify, while others may be more challenging due to subtle abnormalities, image variation, or class imbalance.
 
 ## Technologies Used
