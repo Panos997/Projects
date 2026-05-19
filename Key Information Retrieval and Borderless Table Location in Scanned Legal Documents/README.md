@@ -1,8 +1,8 @@
 # Key Information Retrieval & Borderless Table Location in Scanned Legal Documents
 
- **Award-Winning Master's Thesis** This repository contains the source code and documentation for my Master's Thesis, conducted at the **Athens University of Economics and Business (AUEB)** in collaboration with the LegalTech company **Cognitiv+**. 
+ **Award-Winning Master's Thesis** This repository contains the source code and documentation for my Master's Thesis, conducted at the **Athens University of Economics and Business (AUEB)** in collaboration with the LegalTech company **Cognitiv+**.
 
->  **Award Notice:** This thesis was officially recognized and awarded for its academic excellence, innovative approach, and practical contribution to the field of Document Intelligence and LegalTech.
+>  **Award:** This thesis was awarded as the **Best Master's Thesis** of the academic year.
 
 The project is unified under a single research goal but is divided into two main core components:
 
@@ -29,7 +29,7 @@ This component explores the capabilities of modern **Multimodal Language Models 
 ---
 
 ## Key Benefits & Impact
-* **Award-Winning Innovation:** Recognized for cutting-edge performance in bridging academic research with real-world enterprise AI solutions.
+* **Award-Winning Project:** Recognized for its performance and real-world impact.
 * **Massive Time Savings:** Automates the tedious task of manually reviewing hundreds of legal and financial pages.
 * **Layout Awareness:** Combines **Natural Language Processing (NLP)** with **Computer Vision** so the AI understands not just the words, but *where* they are placed on a page.
 * **Robustness:** Successfully handles the notoriously difficult problem of borderless tables where standard OCR software usually fails.
