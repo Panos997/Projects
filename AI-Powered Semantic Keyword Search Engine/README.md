@@ -122,7 +122,7 @@ medical innovation
 
 ---
 
-# 📂 What the System Requires
+# What the System Requires
 
 Before using the application, the following are required:
 
