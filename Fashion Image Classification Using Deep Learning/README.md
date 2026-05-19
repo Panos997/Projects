@@ -1,68 +1,56 @@
 # Fashion Image Classification Using Deep Learning
 
-This folder contains a deep learning project for image classification using the **Fashion MNIST** dataset, available on Kaggle:
+This repository contains a deep learning project for multi-class image classification using the **Fashion MNIST** dataset. The goal is to classify $28 \times 28$ grayscale fashion product images into 10 distinct categories, exploring the architectural transition and performance differences between dense networks and convolutional networks.
 
-https://www.kaggle.com/datasets/zalando-research/fashionmnist
+The project is implemented in Python using **TensorFlow**, **Keras**, and **Keras Tuner** for automated hyperparameter optimization.
 
-The goal of the project is to classify grayscale fashion product images into different categories using deep learning models.
-
-The project is implemented in a Jupyter/Google Colab notebook using **TensorFlow** and **Keras**. It explores and compares different neural network approaches, including Multi-Layer Perceptron models and Convolutional Neural Networks.
+---
 
 ## Dataset
 
-The project uses the **Fashion MNIST** dataset, which contains 28x28 grayscale images of fashion products. It is designed as a more challenging alternative to the classic MNIST digit dataset and is commonly used for benchmarking image classification models.
+The **Fashion MNIST** dataset consists of 60,000 training images and 10,000 test images. Each sample is a $28 \times 28$ grayscale image associated with a label from one of the following 10 classes:
 
-The dataset includes 10 classes:
-* T-shirt/top
-* Trouser
-* Pullover
-* Dress
-* Coat
-* Sandal
-* Shirt
-* Sneaker
-* Bag
-* Ankle boot
+* `0`: T-shirt/top
+* `1`: Trouser
+* `2`: Pullover
+* `3`: Dress
+* `4`: Coat
+* `5`: Sandal
+* `6`: Shirt
+* `7`: Sneaker
+* `8`: Bag
+* `9`: Ankle boot
 
-Each image belongs to one of these categories, and the task is to train deep learning models that can correctly classify each fashion item.
+All pixel values are normalized to the range $[0, 1]$ prior to training to ensure numerical stability.
 
-## Project Overview
+---
 
-The purpose of this project is to build, train, tune, and evaluate deep learning models for fashion image classification.
+## Project Workflow
 
-The notebook performs the following steps:
-* Loads the Fashion MNIST dataset.
-* Explores the structure and shape of the data.
-* Visualizes sample images from the dataset.
-* Normalizes image pixel values to the range 0-1.
-* Converts class labels into one-hot encoded format.
-* Splits the data into training, validation, and test sets.
-* Builds and trains Multi-Layer Perceptron models.
-* Builds and trains Convolutional Neural Network models.
-* Compares different optimizers, including Adam and SGD.
-* Applies regularization techniques such as dropout.
-* Uses callbacks such as Early Stopping and ReduceLROnPlateau.
-* Uses hyperparameter tuning to search for better model configurations.
-* Evaluates model performance using classification metrics.
-* Visualizes training curves and confusion matrices.
+The machine learning pipeline inside the notebook follows these core steps:
+1. **Data Loading & Splitting:** Importing the dataset and splitting the original training data into training ($90\%$) and validation/dev ($10\%$) sets.
+2. **Data Exploration:** Visualizing sample images and inspecting class distributions across the subsets.
+3. **Preprocessing:** Normalizing pixel intensities and converting integer labels into one-hot encoded vectors.
+4. **Baseline Modeling (MLP):** Reshaping images into 1D vectors and training fully connected neural networks.
+5. **Advanced Modeling (CNN):** Maintaining the 2D spatial grid of the images and training convolutional architectures.
+6. **Hyperparameter Tuning:** Using `Keras Tuner` with **Bayesian Optimization** to automatically find the best structural parameters (layers, units, learning rates, batch sizes).
+7. **Evaluation:** Comparing models using learning curves (loss/accuracy), classification reports (Precision, Recall, F1-score), and Confusion Matrices.
 
-## Models
+---
 
-This project implements and compares two fundamentally different architectural approaches to demonstrate the evolution of Deep Learning in Computer Vision.
+## Model Architectures
+
+This project highlights and compares two fundamentally different structural approaches:
 
 ### 1. Multi-Layer Perceptron (MLP) - The Baseline
-In this approach, the spatial 2D structure of the image is disregarded to establish a simple baseline.
-
-* **The Pipeline:** The $28 \times 28$ pixel image is immediately fed into a `Flatten()` layer, converting it into a flat, one-dimensional vector of $784$ features ($28 \times 28 = 784$).
-* **The Architecture:** This 1D vector passes directly through a sequence of fully connected (`Dense`) layers, followed by `Dropout` for regularization, and a final `Softmax` layer for prediction.
-* **Limitation:** By flattening the input at the very beginning, the MLP loses all spatial relationships between neighboring pixels (e.g., it cannot inherently process the geometric structure of a sleeve or a collar).
+* **Data Reshaping:** The $28 \times 28$ image is immediately flattened into a single 1D vector of $784$ features ($28 \times 28 = 784$).
+* **Pipeline:** This vector passes directly through a sequence of fully connected (`Dense`) hidden layers, regularized with `Dropout`.
+* **Limitation:** By flattening the image right at the input stage, the network completely loses the spatial/geometric relationships between neighboring pixels.
 
 ### 2. Convolutional Neural Network (CNN) - The Spatial Approach
-To overcome the limitations of the MLP, a CNN is implemented to extract visual features while preserving the image's original geometry.
-
-* **The Pipeline:** The image retains its 2D grid shape ($28 \times 28 \times 1$) and is first passed through local feature extraction layers.
-* **The Architecture:** It starts with alternating **Convolutional layers** (`Conv2D`), which apply learnable filters to detect local patterns (like edges, textures, and clothing shapes), and **Pooling layers** (`MaxPooling2D`) to downsample the spatial dimensions.
-* **The Transition:** Only *after* the CNN layers have extracted these high-level visual features do we apply a `Flatten()` layer. This converts the rich feature maps into a 1D vector, which is then passed to the final `Dense` classification layers.
+* **Data Reshaping:** Images retain their original 2D grid shape ($28 \times 28 \times 1$, where $1$ represents the grayscale channel).
+* **Pipeline:** The input first passes through alternating **Convolutional layers** (`Conv2D`) to extract local visual patterns (edges, textures, shapes) and **Pooling layers** (`MaxPool2D`) to downsample spatial dimensions. 
+* **The Transition:** A `Flatten()` layer is applied **only after** the convolutional layers have completed feature extraction. The resulting feature vector is then routed to the final dense layers for classification.
 
 ---
 
@@ -71,63 +59,26 @@ To overcome the limitations of the MLP, a CNN is implemented to extract visual f
 | Feature | Multi-Layer Perceptron (MLP) | Convolutional Neural Network (CNN) |
 | :--- | :--- | :--- |
 | **Input Shape at Layer 1** | Flattened 1D Vector ($784$) | Original 2D Grid ($28 \times 28 \times 1$) |
-| **Initial Processing** | Fully Connected (`Dense`) layers | Convolutional (`Conv2D`) + Pooling layers |
+| **Initial Processing** | Fully Connected (`Dense`) layers | Convolutional (`Conv2D`) + Max-Pooling layers |
 | **Spatial Awareness** | Lost immediately at the input stage | Preserved throughout feature extraction |
 | **Target Patterns** | Global pixel intensities | Local visual features (edges, shapes, patches) |
 
 ---
 
-## Hyperparameter Tuning
+## Results & Key Observations
 
-Hyperparameter tuning is used to improve model performance by searching for stronger model configurations.
+* **Architectural Superiority:** The Convolutional Neural Network significantly outperforms the MLP baseline, achieving a test accuracy of **~91%**. This demonstrates that retaining the spatial geometry of image data is critical for computer vision tasks.
+* **Optimizer Performance:** Experiments show that adaptive optimizers like **Adam** converge faster and yield much smoother optimization paths compared to standard Stochastic Gradient Descent (**SGD**).
+* **Batch Normalization Effects:** Comparing CNN variants revealed that training with and without Batch Normalization achieved nearly identical performance on the test set. The most critical hyperparameters influencing model score variance were **learning rate** and **batch size**.
+* **Classification Challenges:** Across all models, distinct clothing categories like *Bags*, *Trousers*, *Sandals*, *Sneakers*, and *Ankle boots* are classified with very high accuracy. Conversely, categories such as *Shirts*, *T-shirts*, *Pullovers*, and *Coats* present a greater challenge and are frequently misclassified due to their highly similar visual shapes and shared features.
 
-The tuning process explores parameters such as:
-* Number of layers
-* Number of units or filters
-* Activation function
-* Dropout rate
-* Learning rate
-* Batch size
-* Kernel initializer
-
-This helps compare multiple model setups instead of relying on a single manually selected configuration.
-
-## Evaluation
-
-The trained models are evaluated using several performance metrics and visualizations.
-
-The evaluation includes:
-* Training / Validation / Test accuracy
-* Training / Validation loss
-* Precision, Recall, and F1-score
-* Detailed Classification Report
-* Confusion Matrix
-* Accuracy and loss curves
-
-The results help identify which model performs better and which fashion categories are more difficult to classify.
-
-## Results And Observations
-
-The project shows that Convolutional Neural Networks are more effective than simple dense models for this image classification task. CNNs are better able to capture visual patterns from the fashion images, while MLP models lose spatial information after flattening the input images.
-
-Some fashion categories are easier to classify, such as bags, trousers, sandals, sneakers, and ankle boots. Other categories, such as shirts, T-shirts, pullovers, and coats, can be more challenging because they share similar shapes and visual features.
-
-The comparison between optimizers also shows how training strategy affects model performance. Adaptive optimizers such as Adam usually converge faster and more smoothly than basic SGD in this type of experiment.
+---
 
 ## Technologies Used
 
-* Python
-* Google Colab / Jupyter Notebook
-* TensorFlow / Keras
-* Keras Tuner
-* NumPy & Pandas
-* Matplotlib
-* Scikit-learn
-
-## Conclusion
-
-This project demonstrates a complete deep learning workflow for multi-class fashion image classification. It covers data preprocessing, model development, hyperparameter tuning, training, evaluation, and result visualization.
-
-The project highlights the structural difference between dense neural networks and convolutional neural networks, showing why CNNs are significantly more effective for image-based tasks.
-
-Future improvements could include more advanced CNN architectures, stronger data augmentation, transfer learning, and additional optimization techniques.
+* **Python**
+* **TensorFlow / Keras**
+* **Keras Tuner** (Bayesian Optimization)
+* **Scikit-learn** (Metrics & Data Splitting)
+* **NumPy & Pandas**
+* **Matplotlib & Seaborn** (Visualizations & Confusion Matrices)
