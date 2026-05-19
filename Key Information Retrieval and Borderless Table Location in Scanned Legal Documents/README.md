@@ -4,7 +4,7 @@
 
 >  **Award:** This thesis was awarded as the **Best Master's Thesis** of the academic year.
 
-The project is unified under a single research goal but is divided into two main core components:
+The project is unified under a single research goal but is divided into two main core sections:
 
 ---
 
