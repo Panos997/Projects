@@ -74,6 +74,7 @@ http://localhost:5000
 ```
 
 ## Example result
+<img width="615" height="511" alt="image" src="https://github.com/user-attachments/assets/811a2ee7-5ffe-4758-86f2-8d060d7219cf" />
 
 After uploading a song, the app may return something like:
 
