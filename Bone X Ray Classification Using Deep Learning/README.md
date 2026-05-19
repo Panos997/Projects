@@ -104,12 +104,19 @@ The notebook also examines how the model performs across the different anatomica
 
 ## Results And Observations
 
-The project shows how a CNN can be trained to detect abnormalities in medical X-ray images. The per-body-part evaluation is especially useful because performance may vary depending on the anatomical region and the visual complexity of the X-ray images.
+The project demonstrates how a Convolutional Neural Network (CNN) can be trained to detect abnormalities across various anatomical regions. 
+
+To evaluate the model's practical behavior, we visualize its predictions on a sample batch of validation/test images. The grid below showcases the model's classification outputs, mapping specific upper-extremity X-rays to their respective predicted states:
 
 <img width="707" height="728" alt="image" src="https://github.com/user-attachments/assets/9efe36d0-cfd1-4322-9c4a-62c6e8f68c94" />
 
+As seen in the visualization, the dataset and model behavior present distinct characteristics depending on the body part:
 
-Some body parts may be easier to classify, while others may be more challenging due to subtle abnormalities, image variation, or class imbalance.
+* **Clear Visual Cues (Easier to Classify):** Some positive cases feature highly visible orthopedic hardware (such as the metal plates and screws seen in the forearm and wrist images). These distinct structural changes provide strong visual features for the CNN to correctly predict a **Positive** (abnormal) label.
+* **Subtle Anomalies (More Challenging):** Other regions, such as the shoulder or elbow, rely on detecting subtle bone misalignments, fractures, or degenerative changes. These cases require the model to capture fine-grained patterns rather than obvious shapes.
+* **Normal Studies:** The instances labeled as **Negative** (such as the hand and wrist examples) represent healthy structures with no detectable abnormalities, serving as the baseline for the binary classifier.
+
+The per-body-part evaluation confirms that visual complexity and structural differences between anatomical categories heavily influence the model's confidence and overall performance matrix.
 
 ## Technologies Used
 
