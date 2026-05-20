@@ -1,6 +1,3 @@
-Έχεις δίκιο. Αυτό είναι πιο σωστό και δεν λέει πράγματα που δεν υπάρχουν μέσα στο notebook.
-
-````markdown
 # Deep Learning Bone X-Ray Classification
 
 ## Overview
@@ -772,4 +769,3 @@ Deep Learning Bone X-Ray Classification is an experimental CNN-based medical ima
 The project demonstrates the full workflow of loading medical image data, preparing datasets, training a custom CNN model, tuning selected hyperparameters, and evaluating predictions by body part.
 
 It is mainly useful as a learning and experimentation project for deep learning, medical image classification, and TensorFlow/Keras workflows.
-````
