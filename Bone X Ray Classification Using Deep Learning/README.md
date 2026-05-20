@@ -685,7 +685,7 @@ The predictions are rounded into binary labels:
 1 = positive
 ```
 
-![Uploading image.png…]()
+<img width="705" height="725" alt="image" src="https://github.com/user-attachments/assets/2476b9e1-2f37-4e58-8b12-fc2156d85602" />
 
 ---
 
