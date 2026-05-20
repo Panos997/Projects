@@ -334,22 +334,6 @@ This makes the generated results more predictable and easier to parse programmat
 
 ---
 
-# Prompt Workflow
-
-The application creates a prompt like:
-
-```text
-You are an expert content analyst.
-Read the article and return relevant tags.
-
-Return only JSON:
-{ "tags": ["tag1", "tag2"] }
-```
-
-The article text is then inserted into the prompt before sending the request to Gemini.
-
----
-
 # Post-Processing Logic
 
 After receiving the Gemini response:
