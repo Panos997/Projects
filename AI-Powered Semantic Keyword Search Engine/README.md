@@ -1,82 +1,93 @@
-# Overview
+# AI Semantic Keyword Retrieval System
 
-**AI Semantic Keyword Retrieval System** is an experimental semantic search project developed during my work at **Kathimerini**.
+## Overview
 
-The project was created as a small internal R&D prototype to explore how semantic AI retrieval systems can identify relevant keywords and concepts based on meaning instead of relying only on exact keyword matching.
+AI Semantic Keyword Retrieval System is an experimental semantic search application designed to retrieve relevant keywords based on semantic meaning instead of exact keyword matching.
 
-Instead of searching using exact words, the system searches using semantic meaning.
+The project was developed as an internal R&D prototype to explore how AI embeddings and vector search can improve keyword retrieval workflows for articles, documents, and text content.
+
+Instead of searching using exact words, the system converts text into embeddings and retrieves the most semantically similar keywords from a vector index.
 
 The project combines:
 
 - OpenAI Embeddings
-- Semantic Vector Search
-- FAISS HNSW Retrieval
-- Approximate Nearest Neighbor Search
+- FAISS Vector Search
+- HNSW Approximate Nearest Neighbor Retrieval
+- GPT-based text summarization
 
 to build a lightweight semantic retrieval engine.
 
-Although the system started as a mini prototype, its architecture was designed with scalability in mind, allowing future expansion to significantly larger keyword datasets and more advanced retrieval workflows.
+---
+
+# What the Application Does
+
+The application receives:
+
+- a phrase
+- a full article
+- or a `.txt` file
+
+and returns the most semantically relevant keywords from a keyword dataset.
+
+Example:
+
+### Input
+
+```text
+Artificial intelligence is transforming healthcare systems through automation.
+```
+
+### Output
+
+```text
+artificial intelligence
+machine learning
+healthcare
+medical innovation
+automation
+```
+
+The system does not rely only on exact words.
+
+Instead, it retrieves keywords based on semantic similarity and contextual meaning.
 
 ---
 
-# Project Goal
+# How It Works
 
-The main objective of the project was to test whether semantic search could retrieve relevant keywords from articles, phrases, or documents using semantic similarity instead of traditional text matching.
-
-During development, two retrieval approaches were evaluated:
-
-1. **Pure Embeddings + Cosine Similarity**  
-   Direct semantic comparison between the query vector and all keyword embeddings.
-
-2. **FAISS HNSW Graph Search**  
-   Approximate nearest-neighbor vector retrieval using graph-based indexing.
-
-Both methods produced meaningful semantic results. However, as the keyword dataset increased, the FAISS HNSW approach proved significantly faster and more scalable.
-
-In summary:
-
-- Small datasets → both methods performed similarly
-- Large datasets → FAISS HNSW performed better due to scalability and retrieval speed
-
----
-
-# How the System Works
-
-The application performs semantic keyword retrieval through the following pipeline:
+The workflow of the application is:
 
 ```text
 User Input
-    ↓
+      ↓
 Optional GPT Summarization
-    ↓
-Text Embedding Generation
-    ↓
+      ↓
+Embedding Generation
+      ↓
 FAISS Vector Search
-    ↓
-Top Semantic Keyword Matches
+      ↓
+Semantic Keyword Retrieval
+      ↓
+Ranked Results
 ```
 
 ---
 
-# How It Works Step-by-Step
+# How the Retrieval Process Works
 
-### 1. User Input
+## 1. User Input
 
 The user can provide:
 
 - a short phrase
 - a full article
-- or a `.txt` file
+- or a path to a `.txt` file
 
-Example:
-
-```text
-Artificial intelligence is transforming healthcare systems
-```
+The application automatically detects whether the input is plain text or a file path.
 
 ---
 
-### 2. Optional GPT Summarization
+## 2. Optional GPT Summarization
 
 Before semantic retrieval begins, the system can optionally summarize the text using:
 
@@ -87,83 +98,102 @@ This helps reduce noise and focus on the most important concepts before embeddin
 
 ---
 
-### 3. Embedding Generation
+## 3. Embedding Generation
 
-The processed text is converted into embeddings using OpenAI embedding models.
+The text is converted into embeddings using OpenAI embedding models.
 
 Embeddings are numerical vector representations of semantic meaning.
 
-Texts with similar meaning produce similar vectors.
+Texts with similar meaning produce similar embedding vectors.
 
----
-
-### 4. FAISS HNSW Retrieval
-
-All keywords from the dataset are converted into embeddings and stored inside a FAISS HNSW vector index.
-
-The system compares the query embedding against the stored keyword embeddings and retrieves the closest semantic matches.
-
-Unlike traditional keyword search, the system retrieves concepts based on semantic similarity instead of exact word matching.
-
----
-
-### 5. Final Results
-
-The system returns the most semantically relevant keywords ranked by similarity score.
-
-Example output:
+The project uses:
 
 ```text
-artificial intelligence
-machine learning
-healthcare
-medical innovation
+text-embedding-3-large
+```
+
+as the embedding model. :contentReference[oaicite:0]{index=0}
+
+---
+
+## 4. FAISS HNSW Retrieval
+
+All keywords from the dataset are embedded and stored inside a FAISS HNSW vector index.
+
+The query embedding is compared against the stored keyword embeddings to retrieve the closest semantic matches.
+
+The retrieval uses:
+
+- FAISS
+- HNSW graph indexing
+- Approximate Nearest Neighbor Search
+
+to improve scalability and retrieval speed.
+
+---
+
+## 5. Hybrid Ranking
+
+After vector retrieval, the system applies additional keyword similarity scoring using:
+
+```python
+rapidfuzz.fuzz.token_set_ratio()
+```
+
+This creates a hybrid scoring mechanism that combines:
+
+- semantic similarity
+- keyword overlap similarity
+
+Final ranking formula:
+
+```text
+0.9 * vector similarity
++ 0.1 * keyword similarity
 ```
 
 ---
 
-# What the System Requires
+## 6. Final Results
 
-Before using the application, the following are required:
-
-## 1. OpenAI API Key
-
-Used for:
-
-- embedding generation
-- GPT summarization
-
----
-
-## 2. Gemini API Key
-
-Used for optional summarization workflows.
-
----
-
-## 3. Keyword Dataset (CSV)
-
-The application requires a CSV file containing keywords.
-
-The CSV must contain a column named:
-
-```text
-keyword
-```
+The application returns the top semantic keyword matches ranked by relevance score.
 
 Example:
 
-```csv
-keyword
-artificial intelligence
+```text
 machine learning
 healthcare
-economy
-football
-music
+medical innovation
+predictive analytics
+artificial intelligence
 ```
 
-These keywords form the semantic retrieval space of the system.
+---
+
+# Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| Python | Main programming language |
+| OpenAI API | Embeddings + GPT summarization |
+| FAISS | Vector similarity search |
+| HNSW | Approximate nearest-neighbor retrieval |
+| NumPy | Vector operations |
+| Pandas | CSV handling and metadata |
+| RapidFuzz | Keyword similarity scoring |
+| Python Dotenv | Environment variable management |
+| Jupyter Notebook | Experimentation and testing |
+
+The project dependencies are listed in `requirements.txt`: :contentReference[oaicite:1]{index=1}
+
+```text
+faiss-cpu
+numpy
+pandas
+python-dotenv
+openai>=1.0.0
+rapidfuzz
+```
 
 ---
 
@@ -173,9 +203,9 @@ These keywords form the semantic retrieval space of the system.
 AI Semantic Keyword Retrieval System/
 │
 ├── app.py
+├── experimentation.ipynb
 ├── requirements.txt
-├── README.md
-└── experimentation.ipynb
+└── README.md
 ```
 
 ---
@@ -184,21 +214,39 @@ AI Semantic Keyword Retrieval System/
 
 ## `app.py`
 
-Main semantic search application.
+Main semantic retrieval application. :contentReference[oaicite:2]{index=2}
 
 Responsible for:
 
-- loading the dataset
+- loading keyword datasets
 - generating embeddings
 - building the FAISS index
 - semantic retrieval
-- result ranking
+- hybrid ranking
+- CSV result export
+- interactive search flow
+
+The file contains the complete retrieval pipeline and CLI workflow.
+
+---
+
+## `experimentation.ipynb`
+
+Notebook used for experimentation and testing.
+
+Used during development for:
+
+- prompt testing
+- embedding experimentation
+- retrieval testing
+- semantic similarity experiments
+- FAISS evaluation
 
 ---
 
 ## `requirements.txt`
 
-Contains all required Python libraries.
+Contains all required dependencies for the project. :contentReference[oaicite:3]{index=3}
 
 Install them using:
 
@@ -208,19 +256,48 @@ pip install -r requirements.txt
 
 ---
 
-# Setup
+# How to Run the Project
 
-Install dependencies:
+## 1. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the application:
+---
+
+## 2. Set API Keys
+
+The project requires:
+
+- OpenAI API Key
+- Gemini API Key
+
+Example:
+
+### Linux / macOS
+
+```bash
+export OPENAI_API_KEY="your_openai_key"
+export GEMINI_API_KEY="your_gemini_key"
+```
+
+### Windows PowerShell
+
+```powershell
+$env:OPENAI_API_KEY="your_openai_key"
+$env:GEMINI_API_KEY="your_gemini_key"
+```
+
+---
+
+## 3. Run the Application
 
 ```bash
 python app.py
 ```
+
+The application starts as an interactive terminal workflow.
 
 ---
 
@@ -230,14 +307,203 @@ When the application starts, it asks for:
 
 1. OpenAI API Key
 2. Gemini API Key
-3. CSV keyword dataset path
+3. CSV dataset path
 
 The system then:
 
+- loads the keyword dataset
 - generates embeddings
 - builds the FAISS HNSW index
 - initializes semantic retrieval
-- starts the search workflow
+
+---
+
+# Dataset Requirements
+
+The application requires a CSV file containing keywords.
+
+The CSV should contain either:
+
+- a column named `keyword`
+- or keywords in the first column
+
+Example:
+
+```csv
+keyword
+artificial intelligence
+machine learning
+healthcare
+economy
+sports
+technology
+```
+
+These keywords become the searchable semantic retrieval space.
+
+---
+
+# Technical Details
+
+# Architecture
+
+The project follows this architecture:
+
+```text
+User Query
+      ↓
+Optional GPT Summarization
+      ↓
+OpenAI Embedding Generation
+      ↓
+FAISS HNSW Vector Search
+      ↓
+Hybrid Similarity Ranking
+      ↓
+Top Semantic Results
+```
+
+---
+
+# Embedding Pipeline
+
+The project uses:
+
+```python
+client.embeddings.create()
+```
+
+from the OpenAI SDK to generate vector embeddings. :contentReference[oaicite:4]{index=4}
+
+The embedding model is:
+
+```text
+text-embedding-3-large
+```
+
+with vector dimension:
+
+```text
+3072
+```
+
+---
+
+# Vector Indexing
+
+The system builds a FAISS HNSW index using:
+
+```python
+faiss.IndexHNSWFlat()
+```
+
+Configured with:
+
+- HNSW graph search
+- Inner product similarity
+- Embedding normalization
+- Approximate nearest-neighbor retrieval
+
+This improves retrieval performance for larger keyword datasets.
+
+---
+
+# Semantic Search Logic
+
+The semantic search process:
+
+1. Embed the query text
+2. Search nearest vectors in FAISS
+3. Retrieve top candidate keywords
+4. Apply keyword similarity boost
+5. Re-rank results
+6. Return top matches
+
+---
+
+# Hybrid Scoring System
+
+The project combines:
+
+- vector similarity
+- fuzzy keyword similarity
+
+to improve ranking quality.
+
+Keyword boosting uses:
+
+```python
+rapidfuzz.fuzz.token_set_ratio()
+```
+
+This helps improve retrieval for partially matching phrases.
+
+---
+
+# Summarization Workflow
+
+Before embedding generation, the system can optionally summarize long text using:
+
+- GPT-4o
+- GPT-4o-mini
+
+The summary is then embedded instead of the full article.
+
+This helps reduce embedding noise and improve semantic retrieval quality.
+
+---
+
+# Result Export
+
+The application can optionally save results as:
+
+```text
+semantic_results.csv
+```
+
+This allows retrieval outputs to be reused outside the application.
+
+---
+
+# Example Usage
+
+## Example 1
+
+### Input
+
+```text
+Machine learning is increasingly used in banking systems to detect fraud and improve risk analysis.
+```
+
+### Output
+
+```text
+machine learning
+finance
+fraud detection
+risk analysis
+artificial intelligence
+```
+
+---
+
+## Example 2
+
+### Input
+
+```text
+Climate change is affecting agriculture and global food production.
+```
+
+### Output
+
+```text
+climate change
+agriculture
+food production
+environment
+global warming
+```
 
 ---
 
@@ -245,26 +511,28 @@ The system then:
 
 This project demonstrates:
 
-- semantic search
+- semantic search systems
 - vector embeddings
-- vector databases
 - approximate nearest-neighbor retrieval
-- scalable semantic keyword matching
-- AI-powered information retrieval pipelines
+- FAISS vector indexing
+- hybrid semantic ranking
+- scalable retrieval architectures
+- AI-powered keyword retrieval
+- semantic understanding workflows
 
-The architecture is conceptually similar to systems used in:
+The architecture is conceptually related to systems used in:
 
 - RAG pipelines
-- AI assistants
+- AI search engines
 - recommendation systems
-- enterprise semantic search
-- intelligent document retrieval systems
-- vector database workflows
+- vector databases
+- intelligent retrieval systems
+- semantic document search
 
 ---
 
 # Conclusion
 
-This project demonstrates how modern AI retrieval systems can move beyond traditional keyword matching and perform semantic understanding through embeddings and vector search.
+AI Semantic Keyword Retrieval System demonstrates how modern AI retrieval pipelines can move beyond traditional keyword matching and perform semantic search using embeddings and vector similarity.
 
-Although developed as a lightweight prototype, the system was designed to explore scalable semantic retrieval architectures that could later support larger datasets and more advanced AI search workflows.
+The project combines OpenAI embeddings, FAISS HNSW indexing, and hybrid ranking techniques to create a scalable semantic keyword retrieval workflow for articles and text content.
