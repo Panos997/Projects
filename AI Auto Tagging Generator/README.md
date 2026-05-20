@@ -2,17 +2,17 @@
 
 ## Overview
 
-AI Auto Tagging Generator is a simple AI-powered application that automatically generates tags from text content using Google Gemini AI models.
+AI Auto Tagging Generator is a lightweight AI-powered application that automatically generates relevant tags from text content using Google Gemini models.
 
-The main purpose of the project is to help users quickly identify the most important topics and keywords inside an article or text without manually reading and tagging everything.
+The purpose of the project is to simplify content organization by automatically identifying the main topics and keywords inside an article or paragraph.
 
-The user simply enters a text, and the AI analyzes the meaning of the content and generates relevant tags automatically.
+Instead of manually reading a text and assigning tags, the user can simply paste the content into the application and let the AI generate meaningful tags automatically.
 
 ---
 
 # What the Application Does
 
-The application takes a piece of text as input and returns a list of tags that describe the main topics of the content.
+The application takes text as input and returns a list of semantic tags that describe the main topics of the content.
 
 Example:
 
@@ -32,60 +32,65 @@ predictive analytics
 technology
 ```
 
-The system understands that the text is related to AI, healthcare, automation, and technology, then generates tags based on the meaning of the text.
+The AI analyzes the meaning of the text and generates tags based on semantic understanding instead of simple keyword matching.
 
 ---
 
 # How It Works
 
-The workflow of the application is very simple:
+The workflow of the application is simple:
 
 ```text
 User enters text
         ↓
 Text is sent to Gemini AI
         ↓
-Gemini analyzes the meaning of the text
+Gemini analyzes the content
         ↓
-Relevant tags are generated
+Structured JSON tags are generated
         ↓
-Tags are displayed in the interface
+Tags are cleaned and displayed
 ```
 
-The application does not simply extract random words from the text.
+The application sends the article text to a Google Gemini model using the Google GenAI SDK.
 
-Instead, the AI tries to understand the semantic meaning of the content and generate tags that best describe the article or paragraph.
+The model returns structured JSON containing generated tags, which are then parsed, cleaned, and displayed to the user.
 
 ---
 
-# Why This Project Is Useful
+# Features
 
-This project can help automate content organization tasks.
-
-Instead of manually assigning tags to articles, the AI can generate them automatically.
-
-Possible use cases include:
-
-- article tagging
-- blog organization
-- SEO workflows
-- metadata generation
-- semantic text analysis
-- automated categorization
+- AI-powered semantic tag generation
+- Google Gemini integration
+- Structured JSON output generation
+- Duplicate tag removal
+- Interactive notebook-based UI
+- Adjustable number of generated tags
+- Gemini model selection
+- Copy generated tags button
+- Live word and token estimation
 
 ---
 
 # Technologies Used
 
-The project was built using the following technologies and tools:
-
 | Technology | Purpose |
 |---|---|
 | Python | Main programming language |
-| Streamlit | User interface and web app |
-| Google Gemini API | AI model for text analysis |
-| Google GenAI SDK | Communication with Gemini models |
-| Jupyter Notebook | Testing and experimentation |
+| Google Gemini API | AI text analysis |
+| Google GenAI SDK | Gemini integration |
+| Jupyter Notebook | Interactive environment |
+| ipywidgets | Interactive UI components |
+| HTML/CSS | UI styling and layout |
+
+The project dependencies include:
+
+```text
+streamlit>=1.36.0
+google-genai>=1.0.0
+```
+
+from `requirements.txt`. :contentReference[oaicite:0]{index=0}
 
 ---
 
@@ -108,37 +113,74 @@ AI Auto Tagging Generator/
 
 ## `ui.py`
 
-Contains the Streamlit user interface.
+Contains the interactive user interface logic. :contentReference[oaicite:1]{index=1}
 
-Responsible for:
-- text input
-- buttons
-- displaying generated tags
-- interaction with the user
+The UI is built using:
+
+- `ipywidgets`
+- HTML
+- IPython display tools
+
+The interface includes:
+
+- text input area
+- API key input
+- Gemini model selector
+- max tags slider
+- generate button
+- copy tags button
+- live metrics for characters, words, and estimated tokens
+
+The application is mainly designed to run inside a Jupyter or Colab notebook environment.
 
 ---
 
 ## `genai_client.py`
 
-Handles communication with Google Gemini.
+Handles communication with Google Gemini. :contentReference[oaicite:2]{index=2}
 
-Responsible for:
-- creating the Gemini client
-- sending prompts to the AI model
-- receiving generated tags
-- returning results back to the UI
+Main responsibilities:
+
+- initializing the Gemini client
+- validating the API key
+- sending prompts to Gemini
+- requesting structured JSON responses
+- parsing generated tags
+- removing duplicate tags
+- returning clean results
+
+The application uses:
+
+```python
+response_mime_type="application/json"
+response_schema=schema
+```
+
+to enforce structured AI output generation.
 
 ---
 
 ## `styles.py`
 
-Contains styling and visual customization for the Streamlit interface.
+Contains all custom CSS styling used by the interface. :contentReference[oaicite:3]{index=3}
+
+The file defines:
+
+- layout styling
+- buttons
+- cards
+- chips/tags
+- gradients
+- responsive UI elements
+- dark mode support
 
 ---
 
 ## `Code.ipynb`
 
-Notebook used for testing, experimentation, and trying prompts during development.
+Notebook used for running the application interactively and testing prompts during development.
+
+The code comments also show that the project was originally developed inside Google Colab.
 
 ---
 
@@ -152,9 +194,7 @@ pip install -r requirements.txt
 
 ---
 
-## 2. Add Gemini API Key
-
-Example:
+## 2. Set Gemini API Key
 
 ### Linux / macOS
 
@@ -170,105 +210,177 @@ $env:GEMINI_API_KEY="your_api_key_here"
 
 ---
 
-## 3. Run the Application
+## 3. Launch the Notebook
 
-```bash
-streamlit run ui.py
+Open:
+
+```text
+Code.ipynb
 ```
 
-After running the command, the application opens locally in the browser.
+using:
+
+- Jupyter Notebook
+- JupyterLab
+- VS Code
+- Google Colab
+
+---
+
+## 4. Run the Application
+
+Inside the notebook:
+
+```python
+from auto_tagging_generator.ui import run_app
+
+run_app()
+```
+
+The UI will appear interactively inside the notebook environment.
 
 ---
 
 # Technical Details
 
-## Application Architecture
+## Architecture
 
-The architecture of the project is simple:
+The project follows a simple architecture:
 
 ```text
-Streamlit UI
+Notebook UI
       ↓
 Gemini API Request
       ↓
-AI Tag Generation
+Structured JSON Response
       ↓
-Display Results
+Tag Cleaning
+      ↓
+Display Generated Tags
 ```
 
 ---
 
-## Internal Flow
+# UI Layer
+
+The UI is implemented with `ipywidgets` instead of Streamlit. :contentReference[oaicite:4]{index=4}
+
+Main UI components include:
+
+- `Textarea`
+- `Buttons`
+- `Dropdown`
+- `Slider`
+- `HTML widgets`
+- `VBox/HBox layouts`
+
+The interface dynamically updates:
+
+- word count
+- character count
+- token estimation
+- generated tags
+
+The generated tags are rendered visually as styled chips using custom HTML and CSS.
+
+---
+
+# Gemini Integration
+
+The project uses:
+
+```python
+from google import genai
+```
+
+through the Google GenAI SDK. :contentReference[oaicite:5]{index=5}
+
+The application initializes a Gemini client using:
+
+```python
+genai.Client(api_key=key)
+```
+
+and sends prompts using:
+
+```python
+client.models.generate_content()
+```
+
+---
+
+# Structured Output Generation
+
+One important feature of the project is the use of structured JSON generation.
+
+The application defines a response schema:
+
+```python
+schema = {
+    "type":"object",
+    "properties":{
+        "tags":{
+            "type":"array",
+            "items":{"type":"string"}
+        }
+    },
+    "required":["tags"]
+}
+```
+
+Gemini is then instructed to return only valid JSON output.
+
+This makes the generated results more predictable and easier to parse programmatically.
+
+---
+
+# Prompt Workflow
+
+The application creates a prompt like:
 
 ```text
-ui.py
-  ↓
-User enters text
-  ↓
-genai_client.py
-  ↓
+You are an expert content analyst.
+Read the article and return relevant tags.
+
+Return only JSON:
+{ "tags": ["tag1", "tag2"] }
+```
+
+The article text is then inserted into the prompt before sending the request to Gemini.
+
+---
+
+# Post-Processing Logic
+
+After receiving the Gemini response:
+
+1. JSON is parsed
+2. Tags are extracted
+3. Duplicate tags are removed
+4. Empty values are ignored
+5. Final cleaned tags are returned
+
+Duplicate filtering is implemented using a Python `set()`.
+
+---
+
+# Internal Application Flow
+
+```text
+User enters article
+        ↓
+UI calls generate_tags()
+        ↓
 Prompt sent to Gemini
-  ↓
-Gemini generates tags
-  ↓
-Response returned
-  ↓
-Tags displayed in UI
+        ↓
+Gemini returns JSON tags
+        ↓
+JSON parsed
+        ↓
+Duplicate cleaning
+        ↓
+Tags displayed as UI chips
 ```
-
----
-
-## Prompt Workflow
-
-The application sends a structured prompt to Gemini asking the model to:
-
-- analyze the text
-- understand the main topics
-- generate relevant tags
-- avoid duplicates
-- return clean output
-
-Example prompt logic:
-
-```text
-Analyze the following text and generate relevant tags.
-
-Rules:
-- Return only tags.
-- Use short keywords or short phrases.
-- Avoid duplicates.
-
-Text:
-{user_text}
-```
-
----
-
-## Streamlit Execution
-
-The application is executed locally using Streamlit.
-
-Command:
-
-```bash
-streamlit run ui.py
-```
-
-The terminal starts the application, and Streamlit launches the web interface in the browser.
-
----
-
-## Google Gemini Integration
-
-The project uses the Google GenAI SDK to communicate with Gemini models.
-
-Typical workflow:
-
-1. User enters text.
-2. Text is sent to Gemini.
-3. Gemini processes the content.
-4. Gemini returns generated tags.
-5. Results are displayed in the interface.
 
 ---
 
@@ -316,6 +428,6 @@ global warming
 
 # Conclusion
 
-AI Auto Tagging Generator is a lightweight AI application that demonstrates how Generative AI can automatically analyze text and generate meaningful tags based on semantic understanding.
+AI Auto Tagging Generator is a lightweight semantic tagging application that demonstrates how Google Gemini can be used to automatically analyze text and generate structured semantic tags.
 
-The project focuses on simplicity, usability, and practical AI-powered content tagging workflows.
+The project focuses on simplicity, interactive AI workflows, structured output generation, and practical GenAI integration inside notebook environments.
