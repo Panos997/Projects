@@ -685,6 +685,8 @@ The predictions are rounded into binary labels:
 1 = positive
 ```
 
+![Uploading image.png…]()
+
 ---
 
 # Body-Part Analysis
