@@ -2,33 +2,38 @@
 
 ## Overview
 
-Deep Learning Bone X-Ray Classification is an experimental medical imaging project focused on evaluating different deep learning approaches for detecting abnormalities in bone X-ray images using the MURA dataset.
+Deep Learning Bone X-Ray Classification is a medical imaging project that uses Convolutional Neural Networks (CNNs) to classify bone X-ray images from the MURA dataset.
 
-The project was developed as a deep learning experimentation pipeline rather than a single fixed model workflow.
+The goal of the project is to explore how deep learning can assist in medical image analysis by automatically detecting abnormalities in bone X-rays.
 
-The main objective was to test and compare different preprocessing methods, training configurations, and deep learning techniques in order to analyze which approaches perform better for musculoskeletal X-ray classification tasks.
+The project focuses on:
 
-The project was implemented and tested inside Google Colab using TensorFlow and Keras.
+- medical image preprocessing
+- deep learning classification
+- transfer learning experimentation
+- model evaluation
+- image-based abnormality detection
+
+The system was developed and tested inside a Jupyter/Google Colab environment using TensorFlow and Keras.
 
 ---
 
-# Project Goal
+# What the Project Does
 
-The goal of the project was to explore how deep learning models can assist in medical image classification by automatically identifying abnormal bone X-rays.
+The project processes bone X-ray images from the MURA dataset and trains deep learning models to classify whether an image is:
 
-Instead of simply training one model, the notebook focuses on experimentation and evaluation across different workflows and configurations.
+- normal
+- abnormal
 
-The experimentation process includes:
+The workflow includes:
 
 - dataset preprocessing
+- train/validation/test splitting
 - image preparation
 - CNN training
-- hyperparameter tuning
-- model comparison
-- validation analysis
 - performance evaluation
 
-The project uses the MURA (Musculoskeletal Radiographs) dataset for experimentation and testing.
+The project experiments with deep learning techniques for medical image classification and automated diagnosis support.
 
 ---
 
@@ -40,7 +45,9 @@ The project uses the:
 MURA (Musculoskeletal Radiographs) Dataset
 ```
 
-which contains bone X-ray images from different body parts such as:
+which contains bone X-ray images from different body parts.
+
+Examples include:
 
 - elbow
 - finger
@@ -55,38 +62,88 @@ The dataset contains both:
 - normal studies
 - abnormal studies
 
-The notebook processes the dataset using the official CSV image path files:
+---
+
+# How It Works
+
+The workflow of the project is:
 
 ```text
-train_image_paths.csv
-valid_image_paths.csv
+X-Ray Images
+      ↓
+Dataset Preprocessing
+      ↓
+Train / Validation / Test Split
+      ↓
+Image Preparation
+      ↓
+CNN Model Training
+      ↓
+Prediction & Evaluation
 ```
 
 ---
 
-# What the Project Does
+# Main Workflow
 
-The system loads X-ray image datasets, preprocesses the data, trains deep learning models, and evaluates classification performance.
+## 1. Dataset Loading
+
+The project loads image paths from CSV files provided by the MURA dataset.
+
+Example:
+
+```python
+train_image_paths.csv
+valid_image_paths.csv
+```
+
+The notebook extracts metadata such as:
+
+- body part
+- patient ID
+- study type
+- abnormality labels
+
+---
+
+## 2. Data Preprocessing
+
+The preprocessing pipeline includes:
+
+- image path processing
+- label extraction
+- dataset cleaning
+- train/test splitting
+- normalization
+- image resizing
+
+The notebook also performs exploratory analysis on the dataset.
+
+---
+
+## 3. Model Training
+
+The project trains deep learning models using TensorFlow/Keras.
 
 The workflow includes:
 
-```text
-X-Ray Dataset
-      ↓
-CSV Preprocessing
-      ↓
-Dataset Splitting
-      ↓
-Image Preparation
-      ↓
-CNN Training
-      ↓
-Validation & Evaluation
-      ↓
-Performance Comparison
-```
+- CNN training
+- transfer learning experimentation
+- hyperparameter tuning
+- validation monitoring
 
-The objective is to evaluate how effectively deep learning models can classify bone X-rays as normal or abnormal.
+---
+
+## 4. Evaluation
+
+The trained model is evaluated using validation and test data.
+
+The notebook includes:
+
+- prediction analysis
+- performance metrics
+- visualization
+- confusion matrix analysis
 
 ---
 
@@ -98,12 +155,12 @@ The objective is to evaluate how effectively deep learning models can classify b
 | TensorFlow | Deep learning framework |
 | Keras | Neural network API |
 | Keras Tuner | Hyperparameter tuning |
-| TensorFlow Addons | Additional training utilities |
+| TensorFlow Addons | Additional deep learning utilities |
 | Pandas | Data processing |
 | NumPy | Numerical operations |
-| Matplotlib | Visualization |
+| Matplotlib | Data visualization |
 | Seaborn | Statistical visualization |
-| Scikit-learn | Dataset splitting |
+| Scikit-learn | Dataset splitting and evaluation |
 | Google Colab | Training environment |
 
 ---
@@ -124,7 +181,7 @@ Deep Learning Bone X-Ray Classification/
 
 ## `Code.ipynb`
 
-Main notebook containing the complete experimentation workflow.
+Main notebook containing the complete deep learning workflow.
 
 The notebook includes:
 
@@ -132,11 +189,10 @@ The notebook includes:
 - metadata extraction
 - train/test splitting
 - image preparation
-- deep learning experimentation
 - model training
 - hyperparameter tuning
-- validation analysis
-- evaluation and visualization
+- evaluation
+- visualization
 
 The notebook was developed inside Google Colab and includes Google Drive integration for dataset access.
 
@@ -156,7 +212,7 @@ pip install tensorflow keras keras-tuner tensorflow-addons pandas numpy matplotl
 
 ## 2. Download the MURA Dataset
 
-Dataset:
+Download the dataset from:
 
 ```text
 https://stanfordmlgroup.github.io/competitions/mura/
@@ -174,24 +230,22 @@ Code.ipynb
 
 using:
 
-- Google Colab
 - Jupyter Notebook
 - JupyterLab
+- Google Colab
 - VS Code
 
 ---
 
 ## 4. Configure Dataset Paths
 
-Inside the notebook, configure the dataset location.
+Inside the notebook, update dataset paths if necessary.
 
 Example:
 
 ```python
 path = '../MURA-v1.1'
 ```
-
-The notebook expects the MURA dataset structure and CSV files to exist in the configured location.
 
 ---
 
@@ -202,53 +256,46 @@ Run the notebook cells sequentially.
 The workflow will:
 
 1. load the dataset
-2. preprocess image metadata
-3. split train/test data
-4. prepare the images
-5. train deep learning models
-6. evaluate predictions
-7. compare model performance
+2. preprocess images
+3. split the dataset
+4. train the model
+5. evaluate predictions
 
 ---
 
 # Technical Details
 
-# Dataset Preprocessing
+# Dataset Processing
 
-The notebook reads dataset image paths from:
+The notebook reads dataset CSV files containing image paths:
 
 ```python
 train_image_paths.csv
 valid_image_paths.csv
 ```
 
-Metadata is extracted directly from image paths, including:
+Metadata such as:
 
 - body part
 - patient ID
 - study type
 - abnormality labels
 
-Example preprocessing logic:
+is extracted directly from image paths.
+
+Example logic:
 
 ```python
 train['Body_Part'] = train['image_path'].apply(lambda x: x.split('/')[2])
 ```
 
-The preprocessing pipeline also includes:
-
-- NaN checking
-- dataset statistics
-- body part distribution analysis
-- patient counting
-
 ---
 
-# Dataset Splitting
+# Data Splitting
 
-The notebook splits the dataset into:
+The dataset is split into:
 
-- train set
+- training set
 - validation set
 - test set
 
@@ -260,19 +307,9 @@ train_test_split()
 
 from Scikit-learn.
 
-Example:
-
-```python
-train, test = train_test_split(
-    train,
-    test_size=0.15,
-    random_state=1888
-)
-```
-
 ---
 
-# Deep Learning Workflow
+# Deep Learning Framework
 
 The project uses:
 
@@ -280,18 +317,21 @@ The project uses:
 TensorFlow + Keras
 ```
 
-for deep learning model development and experimentation.
+for model development and training.
 
 The notebook imports:
 
 ```python
-import tensorflow as tf
-import keras_tuner as kt
+tensorflow as tf
 ```
 
-for model training and hyperparameter tuning.
+and:
 
-The workflow focuses on experimentation and evaluation rather than a single production model.
+```python
+keras_tuner as kt
+```
+
+for hyperparameter experimentation.
 
 ---
 
@@ -299,11 +339,10 @@ The workflow focuses on experimentation and evaluation rather than a single prod
 
 The project includes experimentation with:
 
-- optimizers
 - learning rates
-- training configurations
-- model architectures
-- tuning strategies
+- optimizers
+- model configurations
+- training parameters
 
 using:
 
@@ -311,11 +350,9 @@ using:
 Keras Tuner
 ```
 
-This allows comparison between different training setups and performance results.
-
 ---
 
-# Visualization & Analysis
+# Visualization
 
 The notebook uses:
 
@@ -326,9 +363,8 @@ to visualize:
 
 - dataset statistics
 - class distribution
-- preprocessing results
 - training performance
-- evaluation metrics
+- evaluation results
 
 ---
 
@@ -341,24 +377,15 @@ from google.colab import drive
 drive.mount('/content/drive/')
 ```
 
-which indicates that the project was primarily developed and executed inside Google Colab using Google Drive storage.
+which indicates that the project was trained inside Google Colab using Google Drive storage.
 
 ---
 
-# Experimental Workflow
+# Medical AI Focus
 
-The notebook was structured as an experimentation environment for testing multiple deep learning workflows on medical X-ray data.
+The project explores how deep learning models can support medical imaging workflows by identifying abnormalities in X-ray images.
 
-The experimentation process includes:
-
-- preprocessing experimentation
-- CNN training workflows
-- hyperparameter tuning
-- training comparison
-- validation monitoring
-- performance analysis
-
-The objective was to evaluate which methods perform better for bone X-ray abnormality classification tasks.
+The system is designed as an experimental educational project and not as a production-ready medical diagnosis system.
 
 ---
 
@@ -383,18 +410,18 @@ Normal / Abnormal Prediction
 This project demonstrates:
 
 - medical image classification
-- deep learning experimentation
+- deep learning workflows
 - CNN training pipelines
-- TensorFlow/Keras workflows
-- dataset preprocessing
+- TensorFlow/Keras usage
+- medical dataset preprocessing
+- transfer learning experimentation
 - hyperparameter tuning
 - AI-assisted medical imaging analysis
-- experimental model evaluation
 
 ---
 
 # Conclusion
 
-Deep Learning Bone X-Ray Classification is an experimental deep learning project focused on evaluating different AI approaches for bone X-ray abnormality classification using the MURA dataset.
+Deep Learning Bone X-Ray Classification demonstrates how deep learning models can be applied to medical imaging tasks using TensorFlow and CNN architectures.
 
-The project demonstrates medical image preprocessing, CNN experimentation, hyperparameter tuning, and deep learning evaluation workflows inside a Google Colab environment.
+The project focuses on medical image preprocessing, model training, and automated abnormality classification using the MURA musculoskeletal radiograph dataset.
