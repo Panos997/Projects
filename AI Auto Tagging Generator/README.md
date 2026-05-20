@@ -113,7 +113,7 @@ AI Auto Tagging Generator/
 
 ## `ui.py`
 
-Contains the interactive user interface logic. :contentReference[oaicite:1]{index=1}
+Contains the interactive user interface logic.
 
 The UI is built using:
 
